@@ -1,182 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>888 Poker - Texas Hold'em</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PokerStars - Texas Hold'em</title>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#0b0e14;color:#fff;min-height:100vh}
-.topbar{background:#11151f;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f5c542}
-.logo{font-weight:900;font-size:22px} .logo span{color:#f5c542}
-.pill{background:#1e2433;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700}
-.hero{max-width:680px;margin:16px auto;padding:0 14px}
-.card{background:#151a26;border:1px solid #2a3042;border-radius:16px;padding:18px}
-input{width:100%;padding:14px;border-radius:12px;border:1px solid #2a3042;background:#0b0e14;color:#fff;font-size:16px;margin:8px 0}
-.btn{width:100%;padding:15px;border:none;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;margin:6px 0}
-.btn-yellow{background:#f5c542;color:#111} .btn-blue{background:#2e7bff;color:#fff} .btn-dark{background:#232a3b;color:#fff} .btn-red{background:#e5484d;color:#fff}
-.btn:disabled{opacity:.5}
-.avatars{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:10px 0}
-.av{font-size:26px;padding:10px 0;background:#0b0e14;border:2px solid #2a3042;border-radius:12px;cursor:pointer;text-align:center}
-.av.sel{border-color:#f5c542;background:#3a2e00;transform:scale(1.08)}
-.soundRow{display:flex;justify-content:space-between;align-items:center;background:#0b0e14;padding:10px 12px;border-radius:12px;margin:8px 0;font-size:14px}
-.switch{font-size:22px;cursor:pointer}
-.tableWrap{max-width:680px;margin:12px auto;padding:0 14px}
-.table{background:radial-gradient(circle at 50% 35%, #1a7a4a 0%, #0f5a34 55%, #0a3d22 100%);border:8px solid #3a2415;border-radius:120px;padding:22px 14px 16px;box-shadow:0 20px 40px rgba(0,0,0,.5)}
-.tableInner{border:2px solid rgba(255,255,255,.18);border-radius:100px;padding:14px}
-.boteBox{text-align:center} .bote{font-size:22px;font-weight:900;color:#ffe27a} .fase{font-size:12px;background:#00000066;padding:5px 10px;border-radius:999px}
-.community{display:flex;gap:8px;justify-content:center;margin:14px 0;min-height:76px}
-.carta{width:52px;height:74px;background:#fff;color:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;box-shadow:0 4px 10px rgba(0,0,0,.4)}
-.carta.roja{color:#d21f2b} .carta.back{background:linear-gradient(135deg,#b91c1c,#7f1d1d);color:#fff;font-size:22px}
-.players{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.player{background:rgba(0,0,0,.35);border:2px solid transparent;border-radius:14px;padding:10px;display:flex;justify-content:space-between;align-items:center}
-.player.active{border-color:#f5c542;background:rgba(245,197,66,.15)} .player.out{opacity:.45}
-.avatar{width:44px;height:44px;border-radius:50%;background:#f5c542;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.myHand{max-width:680px;margin:12px auto;padding:0 14px;text-align:center} .myCards{display:flex;gap:10px;justify-content:center;margin:8px 0}
-.actionBar{max-width:680px;margin:0 auto;padding:0 14px 20px} .row{display:flex;gap:8px} .row .btn{flex:1} .row input{flex:1.4}
-.adminBar{background:#f5c542;color:#111;border-radius:12px;padding:12px;font-weight:800;margin-bottom:12px}
-.msg{font-weight:700;text-align:center;margin:8px 0;min-height:22px}
-</style>
-</head>
-<body>
-<div class="topbar"><div class="logo">888 <span>POKER</span></div><div class="pill">Texas Hold'em • 5 max</div><div class="pill" id="soundBtn" onclick="toggleSonido()" style="cursor:pointer">🔊 Sonido: ON</div></div>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent} body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#0a0a0f;color:#fff;overflow-x:hidden}
+.topbar{background:#000;display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:3px solid #d4af37;position:sticky;top:0;z-index:10}
+.logo{font-weight:900;font-size:22px;letter-spacing:1px}.logo i{color:#d4af37;font-style:normal}.logo small{font-size:10px;color:#aaa;display:block;letter-spacing:3px}
+.pill{background:#1c1c22;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid #333}
+.pill.on{color:#4ade80}
+.lobby{max-width:480px;margin:18px auto;padding:0 14px}
+.card{background:linear-gradient(180deg,#17171f,#101016);border:1px solid #2a2a35;border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.card h1{margin:0;font-size:30px;text-align:center}.card p.sub{text-align:center;color:#9ca3af;margin:6px 0 14px;font-size:13px}
+input{width:100%;padding:15px;border-radius:12px;border:1px solid #333;background:#000;color:#fff;font-size:16px;margin:8px 0;outline:none}
+input:focus{border-color:#d4af37}
+.btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;margin:7px 0;letter-spacing:.5px}
+.btn-gold{background:linear-gradient(180deg,#ffe27a,#d4af37);color:#000;box-shadow:0 4px 0 #8a6d1a}
+.btn-blue{background:linear-gradient(180deg,#3b82f6,#1d4ed8);color:#fff}
+.btn-dark{background:#23232e;color:#fff;border:1px solid #333}
+.avatars{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin:10px 0}
+.av{font-size:24px;padding:10px 0;background:#000;border:2px solid #2a2a35;border-radius:12px;cursor:pointer;text-align:center}
+.av.sel{border-color:#d4af37;background:#3a2f00;transform:scale(1.1)}
+.label{font-weight:800;font-size:14px;margin-top:12px}
+.soundRow{display:flex;justify-content:space-between;align-items:center;background:#000;padding:12px;border-radius:12px;margin:10px 0;font-size:14px}
 
-<div id="lobby" class="hero">
- <div class="card" style="text-align:center">
-  <h1 style="margin:4px 0">♠️ Texas Hold'em</h1><p style="color:#94a3b8;margin:0">Mesa privada • 5 jugadores • 1000 fichas</p>
-  <input id="miNombre" placeholder="Tu nombre">
-  <p style="text-align:left;margin:10px 0 0;font-weight:700">Elige tu avatar 👇</p>
-  <div class="avatars" id="avatars"></div>
-  <p id="avatarSel" style="font-size:14px;color:#f5c542">Avatar: 🦁 León</p>
-  <div class="soundRow"><span>🔊 Sonido de fichas y cartas</span><span class="switch" onclick="toggleSonido()" id="soundSwitch">🔊</span></div>
-  <button class="btn btn-yellow" onclick="crear()">👑 CREAR MESA COMO ADMIN</button>
-  <p style="color:#94a3b8;font-size:13px">Solo tú serás admin. Solo tú empiezas manos.</p>
-  <div style="color:#94a3b8;font-size:13px;margin:10px 0">— o únete a una mesa —</div>
-  <input id="codigoUnirse" placeholder="Código, ej: AB12" style="text-transform:uppercase">
-  <button class="btn btn-blue" onclick="unirse()">UNIRSE CON CÓDIGO</button>
-  <p id="error" style="color:#ff7b7b;font-weight:700"></p>
- </div>
-</div>
-
-<div id="juego" style="display:none">
- <div class="hero"><div class="card">
-  <div style="display:flex;justify-content:space-between"><span>Código: <b id="codigoSala" style="color:#f5c542;font-size:20px;letter-spacing:3px"></b></span><span id="estado"></span></div>
-  <div id="adminPanel" style="display:none" class="adminBar">👑 ERES EL ADMIN<br><button class="btn btn-dark" onclick="empezarMano()">▶️ EMPEZAR MANO</button><button class="btn btn-dark" onclick="nuevaMano()">🔄 NUEVA MANO</button></div>
-  <div class="msg" id="mensaje"></div>
- </div></div>
- <div class="tableWrap"><div class="table"><div class="tableInner">
-  <div class="boteBox"><span class="fase" id="fase">ESPERANDO</span><div class="bote">💰 Bote: <span id="bote">0</span></div><div style="font-size:13px;color:#d1fae5">Apuesta actual: <span id="apuestaActual">0</span></div></div>
-  <div class="community" id="cartasMesa"></div>
-  <div class="players" id="jugadores"></div>
- </div></div></div>
- <div class="myHand"><h3 style="margin:6px">Tus cartas <span id="miAvatarShow"></span></h3><div class="myCards" id="misCartas"></div><p id="miInfo"></p></div>
- <div class="actionBar" id="acciones" style="display:none">
-  <div class="row"><button class="btn btn-dark" onclick="accion('pasar')">PASAR</button><button class="btn btn-blue" onclick="accion('igualar')">IGUALAR <span id="txtIgualar"></span></button></div>
-  <div class="row"><input id="cantidadSubir" type="number" placeholder="Subir a... ej: 100"><button class="btn btn-yellow" onclick="accion('subir')">SUBIR</button></div>
-  <div class="row"><button class="btn btn-red" onclick="accion('allin')">🔥 ALL-IN</button><button class="btn btn-dark" onclick="accion('retirarse')">RETIRARSE</button></div>
- </div>
- <div style="max-width:680px;margin:0 auto;padding:0 14px 20px"><button class="btn btn-dark" onclick="location.reload()">Salir</button></div>
-</div>
-
-<script>
-const URL="https://script.google.com/macros/s/AKfycbw5rjSIXGKX4giHbt4q-YXMtEGYc0xMwQ2kQgx2pGMRRQqemdU0UDg9Nb4d4paNS0-nJw/exec";
-let codigo="", miNombre="", soyAdmin=false, intervalo=null, estadoActual=null;
-let avatarSel="🦁", avatarNombre="León", sonidoOn=true, ultimoBote=0, ultimaMesaLen=0, ultimoMensaje="";
-const AVATARES=[["🦁","León"],["🦊","Zorro"],["🐺","Lobo"],["🦅","Águila"],["🐯","Tigre"],["🦈","Tiburón"],["🤖","Robot"],["👑","Rey"],["😎","Cool"],["🤠","Vaquero"],["🦄","Unicornio"],["👽","Alien"],["🐲","Dragón"],["😈","Diablo"],["🥷","Ninja"],["🍀","Suerte"]];
-const contAv=document.getElementById('avatars');
-AVATARES.forEach(([emoji,nombre])=>{
-  const d=document.createElement('div'); d.className='av'+(emoji===avatarSel?' sel':''); d.innerText=emoji; d.title=nombre;
-  d.onclick=()=>{ avatarSel=emoji; avatarNombre=nombre; document.querySelectorAll('.av').forEach(x=>x.classList.remove('sel')); d.classList.add('sel'); document.getElementById('avatarSel').innerText="Avatar: "+emoji+" "+nombre; playChip(); };
-  contAv.appendChild(d);
-});
-function toggleSonido(){ sonidoOn=!sonidoOn; document.getElementById('soundBtn').innerText = sonidoOn ? "🔊 Sonido: ON" : "🔇 Sonido: OFF"; document.getElementById('soundSwitch').innerText = sonidoOn ? "🔊" : "🔇"; if(sonidoOn) playChip(); }
-let audioCtx=null;
-function playChip(){
-  if(!sonidoOn) return;
-  try{
-    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==='suspended') audioCtx.resume();
-    [0,0.09].forEach((delay,i)=>{
-      const t=audioCtx.currentTime+delay;
-      const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain();
-      osc.type='square'; osc.frequency.value= 2200 - i*400;
-      gain.gain.setValueAtTime(0.12,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.07);
-      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(t); osc.stop(t+0.08);
-    });
-  }catch(e){}
-}
-function playCarta(){
-  if(!sonidoOn) return;
-  try{
-    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    const t=audioCtx.currentTime; const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain();
-    osc.type='triangle'; osc.frequency.setValueAtTime(800,t); osc.frequency.exponentialRampToValueAtTime(300,t+0.12);
-    gain.gain.setValueAtTime(0.15,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.12);
-    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(t); osc.stop(t+0.13);
-  }catch(e){}
-}
-function playWin(){
-  if(!sonidoOn) return;
-  try{
-    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    [523,659,784,1046].forEach((f,i)=>{ const t=audioCtx.currentTime+i*0.12; const o=audioCtx.createOscillator(); const g=audioCtx.createGain(); o.frequency.value=f; g.gain.setValueAtTime(0.15,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.25); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+0.26); });
-  }catch(e){}
-}
-async function crear(){
-  miNombre=document.getElementById('miNombre').value.trim(); if(!miNombre) return alert('Pon tu nombre');
-  playChip();
-  const r=await fetch(URL,{method:'POST',body:JSON.stringify({action:'crear',nombre:miNombre,avatar:avatarSel})}); const d=await r.json(); if(d.error) return document.getElementById('error').innerText=d.error;
-  codigo=d.code; soyAdmin=true; entrar();
-}
-async function unirse(){
-  miNombre=document.getElementById('miNombre').value.trim(); codigo=document.getElementById('codigoUnirse').value.toUpperCase().trim();
-  if(!miNombre||!codigo) return alert('Pon nombre y codigo');
-  playChip();
-  const r=await fetch(URL,{method:'POST',body:JSON.stringify({action:'unirse',code:codigo,nombre:miNombre,avatar:avatarSel})}); const d=await r.json();
-  if(d.error) return document.getElementById('error').innerText=d.error;
-  soyAdmin=false; entrar();
-}
-function entrar(){ document.getElementById('lobby').style.display='none'; document.getElementById('juego').style.display='block'; document.getElementById('codigoSala').innerText=codigo; document.getElementById('adminPanel').style.display= soyAdmin?'block':'none'; document.getElementById('miAvatarShow').innerText=avatarSel; intervalo=setInterval(actualizar,1500); actualizar(); }
-function cartaDiv(c){
-  const div=document.createElement('div');
-  if(c.txt==="🂠"){ div.className='carta back'; div.innerText='🂠'; return div; }
-  div.className='carta'+(c.p==='♥'||c.p==='♦'?' roja':''); div.innerText=c.txt; return div;
-}
-async function actualizar(){
-  if(!codigo) return;
-  const r=await fetch(URL+"?code="+codigo+"&nombre="+encodeURIComponent(miNombre)); const s=await r.json(); if(s.error) return; estadoActual=s;
-  if(s.bote!==ultimoBote){ if(s.bote>ultimoBote) playChip(); ultimoBote=s.bote; }
-  if(s.mesa.length!==ultimaMesaLen){ if(s.mesa.length>ultimaMesaLen) playCarta(); ultimaMesaLen=s.mesa.length; }
-  if(s.mensaje!==ultimoMensaje){ if(s.mensaje.includes("ALL-IN")||s.mensaje.includes("sube")) playChip(); if(s.mensaje.includes("Showdown")||s.mensaje.includes("gana")) playWin(); ultimoMensaje=s.mensaje; }
-  document.getElementById('estado').innerText = s.jugadores.length+"/5 • Admin: "+s.admin;
-  document.getElementById('mensaje').innerText = s.mensaje + (s.ganadorMano ? " | "+s.ganadorMano : "");
-  document.getElementById('bote').innerText=s.bote; document.getElementById('apuestaActual').innerText=s.apuestaActual; document.getElementById('fase').innerText=s.fase.toUpperCase();
-  const mesa=document.getElementById('cartasMesa'); mesa.innerHTML='';
-  if(s.mesa.length===0) mesa.innerHTML='<p style="color:#d1fae5">Esperando a que el admin empiece la mano</p>';
-  s.mesa.forEach(c=>mesa.appendChild(cartaDiv(c)));
-  const yo=s.jugadores.find(j=>j.nombre===miNombre);
-  const mis=document.getElementById('misCartas'); mis.innerHTML='';
-  if(yo && yo.cartas && yo.cartas.length){ yo.cartas.forEach(c=>mis.appendChild(cartaDiv(c))); document.getElementById('miInfo').innerHTML="Tus fichas: <b>"+yo.fichas+"</b> • Tu apuesta: "+yo.apuesta+(yo.evaluacion && s.fase==='fin' ? " • Tu jugada: <b>"+yo.evaluacion.nombre+"</b>" : ""); }
-  else { document.getElementById('miInfo').innerText = yo ? "Tus fichas: "+yo.fichas : ""; }
-  const cont=document.getElementById('jugadores'); cont.innerHTML='';
-  s.jugadores.forEach((j,i)=>{
-    const div=document.createElement('div'); div.className='player'+(i===s.turno && s.fase!=='esperando' && s.fase!=='fin' ? ' active':'')+(j.retirado?' out':'');
-    div.innerHTML="<div style='display:flex;gap:8px;align-items:center'><div class='avatar'>"+(j.avatar||"🙂")+"</div><div style='text-align:left'><b>"+(j.esAdmin?"👑 ":"")+j.nombre+"</b><div style='font-size:12px;opacity:.8'>"+(j.retirado?"❌ Retirado":j.allin?"🔥 ALL-IN":"Apuesta "+j.apuesta)+"</div></div></div><div style='text-align:right'><b>💰 "+j.fichas+"</b>"+(s.fase==='fin'&&j.cartas?"<div style='font-size:12px'>"+j.cartas.map(c=>c.txt).join(" ")+"</div>":"")+"</div>";
-    if(soyAdmin && j.nombre!==miNombre){ const b=document.createElement('button'); b.innerText='Expulsar'; b.style.cssText='width:auto;padding:6px 8px;font-size:12px'; b.className='btn btn-red'; b.onclick=()=>expulsar(j.nombre); div.appendChild(b); }
-    cont.appendChild(div);
-  });
-  const miTurno = yo && s.jugadores[s.turno] && s.jugadores[s.turno].nombre===miNombre && s.fase!=='esperando' && s.fase!=='fin';
-  document.getElementById('acciones').style.display = miTurno ? 'block':'none';
-  if(yo) document.getElementById('txtIgualar').innerText = " ("+(s.apuestaActual - yo.apuesta)+")";
-  if(yo) document.getElementById('cantidadSubir').placeholder = "Subir a más de "+s.apuestaActual;
-}
-async function empezarMano(){ playCarta(); const r=await fetch(URL,{method:'POST',body:JSON.stringify({action:'empezar_mano',code:codigo,nombre:miNombre})}); const d=await r.json(); if(d.error) alert(d.error); actualizar(); }
-async function nuevaMano(){ playChip(); await fetch(URL,{method:'POST',body:JSON.stringify({action:'nueva_mano',code:codigo,nombre:miNombre})}); actualizar(); }
-async function expulsar(n){ if(!confirm('Expulsar a '+n+'?')) return; await fetch(URL,{method:'POST',body:JSON.stringify({action:'expulsar',code:codigo,nombre:miNombre,expulsar:n})}); actualizar(); }
-async function accion(tipo){
-  const cantidad = document.getElementById('cantidadSubir').value;
-  playChip();
-  const r=await fetch(URL,{method:'POST',body:JSON.stringify({action:'accion',code:codigo,nombre:miNombre,tipo,cantidad})}); const d=await r.json(); if(d.error) alert(d.error);
-  actualizar();
-}
-</script>
-</body>
-</html>
+/* === MESA POKERSTARS === */
+.game{display:none;max-width:520px;margin:0 auto;padding:8px 10px 20px}
+.infoBar{display:flex;justify-content:space-between;align-items:center;background:#14141b;border:1px solid #2a2a35;border-radius:12px;padding:8px 12px;font-size:13px}
+.infoBar b{color:#facc15;letter-spacing:2px}
+.adminBar{background:linear-gradient(180deg,#facc15,#d4af37);color:#000;border-radius:12px;padding:10px;font-weight:800;text-align:center;margin:8px 0;display:none}
+.adminBar button{width:49%;display:inline-block;padding:12px}
+.table{position:relative;height:480px;margin:14px 0 8px;background:#000;border-radius:50%;padding:14px;box-shadow:0 15px 40px rgba(0,0,0,.7)}
+.wood{position:absolute;inset:0;background:radial-gradient(ellipse at center,#4a2c14 0%,#2a1a0a 55%,#1a0f05 100%);border-radius:50%;border:6px solid #1a0f05}
+.felt{position:absolute;inset:16px;background:radial-gradient(ellipse at 50% 35%,#1e8a4d 0%,#11653a 55%,#0a3d22 100%);border-radius:50%;border:2px solid rgba(255,255,255,.15);overflow:hidden}
+.felt:before{content:"POKERSTARS";position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:900;color:rgba(255,255,255,.08);letter-spacing:6px;white-space:nowrap}
+.felt:after{content:"TEXAS HOLD'EM";position:absolute;top:56%;left:50%;transform:translate(-50%,-50%);font-size:11px;letter-spacing:4px;color:rgba(255,255,255,.12)}
+.center{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%;z-index:3}
+.pot{font-weight:900;font-size:17px;text-shadow:0 2px 4px #000}.pot span{color:#ffe27a;font-size:20px}
+.chipsPot{display:flex;justify-content:center;gap:2px;margin:6px 0}
+.chip{width:22px;height:22px;border-radius:50%;border:2.5px dashed #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;box-shadow:0 2px 4px rgba(0,0,0,.5)}
+.chip.white{background:#e5e7eb;color:#111}.chip.red{background:#dc2626}.chip.blue{background:#2563eb}.chip.black{background:#111}.chip.green{background:#16a34a}
+.community{display:flex;gap:6px;justify-content:center;margin:8px 0;min-height:64px}
+.carta{width:44px;height:62px;background:#fff;color:#111;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:17px;font-weight:900;line-height:1;box-shadow:0 4px 10px rgba(0,0,0,.5);animation:repartir .35s ease}
+.carta small{font-size:12px}
+.carta.roja{color:#d21f2b} .carta.back{background:linear-gradient(135deg,#b91c1c,#7f1d1d);color:#fff;font-size:18px}
+@keyframes repartir{from{transform:translateY(-20px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.msg{text-align:center;font-weight:700;font-size:13px;min-height:20px;margin:4px 0;color:#fde68a;text-shadow:0 1px 2px #000}
+/* ASIENTOS ALREDEDOR */
+.seat{position:absolute;width:96px;z-index:5;text
