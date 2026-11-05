@@ -21,8 +21,6 @@ input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;backgroun
 .infoBar b{color:#f5c542;letter-spacing:2px}
 .adminBar{background:#f5c542;color:#000;border-radius:12px;padding:10px;font-weight:800;text-align:center;margin:8px 0;display:none}
 .msg{text-align:center;font-weight:700;font-size:14px;min-height:22px;margin:8px 0;color:#ffe27a}
-
-/* MESA ARREGLADA - COLORES PLANOS, SE VE SEGURO */
 .table{position:relative;height:500px;margin:12px 0;background:#5a2e12;border-radius:60px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 .felt{position:absolute;inset:16px;background:#0f7a3d;border-radius:50px;border:3px solid #ffe27a;overflow:hidden}
 .feltLogo{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);text-align:center;color:rgba(255,255,255,.18);font-weight:900;font-size:22px;letter-spacing:3px;line-height:1.2}
@@ -86,7 +84,7 @@ input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;backgroun
 </div>
 
 <script>
-const URL="PEGA_AQUI_TU_URL_EXEC";
+const URL="https://script.google.com/macros/s/AKfycbw5rjSIXGKX4giHbt4q-YXMtEGYc0xMwQ2kQgx2pGMRRQqemdU0UDg9Nb4d4paNS0-nJw/exec";
 let codigo="", miNombre="", soyAdmin=false, intervalo=null;
 let avatarSel="🦁", sonidoOn=true, ultimoBote=0, ultimaMesaLen=0, ultimoMensaje="";
 const AVATARES=[["🦁","León"],["🦊","Zorro"],["🐺","Lobo"],["🦅","Águila"],["🐯","Tigre"],["🦈","Tiburón"],["🤖","Robot"],["👑","Rey"],["😎","Cool"],["🤠","Vaquero"],["🦄","Unicornio"],["👽","Alien"],["🐲","Dragón"],["😈","Diablo"],["🥷","Ninja"],["🍀","Suerte"]];
@@ -155,4 +153,24 @@ async function actualizar(){
     const posClass = s.jugadores.length===5 ? "pos"+pos : s.jugadores.length===4 ? ["pos0","pos1","pos2","pos3"][pos] : s.jugadores.length===3 ? ["pos0","pos2","pos3"][pos] : ["pos0","pos2"][pos];
     const div=document.createElement('div'); div.className='seat '+posClass+(i===s.turno && s.fase!=='esperando' && s.fase!=='fin'?' active':'')+(j.retirado?' out':'')+(j.nombre===miNombre?' me':'');
     const esDealer = s.numMano>0 && (i===((s.numMano-1)%s.jugadores.length));
-    div.innerHTML='<div class="ava">'+(j.avatar||"🙂")+(esDealer?'<div class="dealer">D</div>':'')+'</div><div class="name">'+(j.esAdmin?"👑 ":"")+j.nombre+'</div><br><div class="stack">💰 '+j.fichas+'</div>'+(j.apuesta>0?'<br><div class="bet">'+j.apuesta+'</div>':'')+(s.fase==='fin'&&j.cartas&&j.nombre!==miNombre?'<div style="font-size:10px;background:#000;padding:2px 6px;border-radius:10px;margin-top:2px">'+j.cartas.map(c=>c.txt).join(" ")+'</div>':'')+(soyAdmin && j.nombre!==miNombre?'<div><button style="font-size:10px;padding:3px 8px;border-radius:8px;border:none;background:#dc262
+    div.innerHTML='<div class="ava">'+(j.avatar||"🙂")+(esDealer?'<div class="dealer">D</div>':'')+'</div><div class="name">'+(j.esAdmin?"👑 ":"")+j.nombre+'</div><br><div class="stack">💰 '+j.fichas+'</div>'+(j.apuesta>0?'<br><div class="bet">'+j.apuesta+'</div>':'')+(s.fase==='fin'&&j.cartas&&j.nombre!==miNombre?'<div style="font-size:10px;background:#000;padding:2px 6px;border-radius:10px;margin-top:2px">'+j.cartas.map(c=>c.txt).join(" ")+'</div>':'')+(soyAdmin && j.nombre!==miNombre?'<div><button style="font-size:10px;padding:3px 8px;border-radius:8px;border:none;background:#dc2626;color:#fff;margin-top:3px" onclick="expulsar(\''+j.nombre+'\')">Expulsar</button></div>':'');
+    seats.appendChild(div);
+  });
+  const winnerBox=document.getElementById('winnerBox');
+  if(s.fase==='fin' && s.ganadorMano){ winnerBox.style.display='block'; winnerBox.innerHTML="🏆 "+s.ganadorMano; } else winnerBox.style.display='none';
+  const miTurno = yo && s.jugadores[s.turno] && s.jugadores[s.turno].nombre===miNombre && s.fase!=='esperando' && s.fase!=='fin';
+  document.getElementById('acciones').style.display = miTurno ? 'block':'none';
+  if(yo){ document.getElementById('txtIgualar').innerText=" ("+(s.apuestaActual - yo.apuesta)+")"; document.getElementById('cantidadSubir').value=Math.max(s.apuestaActual+20, 40); document.getElementById('sliderSubir').max=Math.max(yo.fichas+yo.apuesta,100); document.getElementById('sliderSubir').value=Math.max(s.apuestaActual+20,40); }
+}
+async function empezarMano(){ playCarta(); const r=await fetch(URL,{method:'POST',body:JSON.stringify({action:'empezar_mano',code:codigo,nombre:miNombre})}); const d=await r.json(); if(d.error) alert(d.error); actualizar(); }
+async function nuevaMano(){ playChip(); await fetch(URL,{method:'POST',body:JSON.stringify({action:'nueva_mano',code:codigo,nombre:miNombre})}); actualizar(); }
+async function expulsar(n){ if(!confirm('Expulsar a '+n+'?')) return; await fetch(URL,{method:'POST',body:JSON.stringify({action:'expulsar',code:codigo,nombre:miNombre,expulsar:n})}); actualizar(); }
+async function accion(tipo){
+  const cantidad=document.getElementById('cantidadSubir').value;
+  playChip();
+  const r=await fetch(URL,{method:'POST',body:JSON.stringify({action:'accion',code:codigo,nombre:miNombre,tipo,cantidad})}); const d=await r.json(); if(d.error) alert(d.error);
+  actualizar();
+}
+</script>
+</body>
+</html>
